@@ -8,6 +8,6 @@ module.exports = {
   mongoURI: 'mongodb://joeyg:lolplease@ds117469.mlab.com:17469/advancednode',
   cookieKey: 'puddlesdidit',
   redisURL: 'redis://127.0.0.1:6379',
-  accessKeyId: 'dA5BEvmZ7rLjtBCApR_6gWHf5I0',
-  secretAccessKey: 'eyJwYXNzcG9ydCI6eyJ1c2VyIjoiNWFhZjUzMTEwOWE2MGQ2MWQ0YjA3NmJjIn19'
+  accessKeyId: 'AKIAJA444F64C7H7VL5A',
+  secretAccessKey: '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'
 };

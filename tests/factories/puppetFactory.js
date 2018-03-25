@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
-const sessionFactory = require('../factories/sessionFactory');
-const userFactory = require('../factories/userFactory');
+const sessionFactory = require('./sessionFactory');
+const userFactory = require('./userFactory');
 
 module.exports = class PuppetFactory {
   static async build() {
