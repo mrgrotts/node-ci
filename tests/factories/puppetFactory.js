@@ -15,26 +15,12 @@ module.exports = class PuppetFactory {
     this.page = page;
   }
 
-  async action(method, route, credentials, headers, body) {
+  async action(method, route, data) {
     try {
-      if (body) {
-        return await this.page.evaluate(
-          (method, path, credentials, headers, body) => fetch(path, { method, credentials, headers, body }).then(res => res.json()),
-          method,
-          route,
-          credentials,
-          headers,
-          body
-        );
-      } else {
-        return await this.page.evaluate(
-          (method, path, credentials, headers) => fetch(path, { method, credentials, headers }).then(res => res.json()),
-          method,
-          route,
-          credentials,
-          headers
-        );
-      }
+      const credentials = 'same-origin';
+      const headers = { 'Content-Type': 'application/json' };
+
+      return await this.request(method, route, credentials, headers, data);
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +28,7 @@ module.exports = class PuppetFactory {
 
   async execute(actions) {
     try {
-      return await Promise.all(actions.map(({ method, route, data }) => this.request(method, route, JSON.stringify(data))));
+      return await Promise.all(actions.map(({ method, route, data }) => this.action(method, route, JSON.stringify(data))));
     } catch (error) {
       console.log(error);
     }
@@ -62,12 +48,30 @@ module.exports = class PuppetFactory {
     await this.page.waitFor('a[href="/auth/logout"]');
   }
 
-  async request(method, route, data) {
+  async request(method, path, credentials, headers, body) {
     try {
-      const credentials = 'same-origin';
-      const headers = { 'Content-Type': 'application/json' };
-
-      return await this.action(method, route, credentials, headers, data);
+      if (body) {
+        // some of our arguments get transformed here
+        // console.log(method, path, credentials, headers, body);
+        return await this.page.evaluate(
+          (method, path, credentials, headers, body) => fetch(path, { method, credentials, headers, body }).then(res => res.json()),
+          method,
+          path,
+          credentials,
+          headers,
+          body
+        );
+      } else {
+        // some of our arguments get transformed here
+        // console.log(method, path, credentials, headers, body);
+        return await this.page.evaluate(
+          (method, path, credentials, headers) => fetch(path, { method, credentials, headers }).then(res => res.json()),
+          method,
+          path,
+          credentials,
+          headers
+        );
+      }
     } catch (error) {
       console.log(error);
     }
