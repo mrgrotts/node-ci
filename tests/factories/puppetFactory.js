@@ -20,7 +20,7 @@ module.exports = class PuppetFactory {
       const credentials = 'same-origin';
       const headers = { 'Content-Type': 'application/json' };
 
-      return await this.request(method, route, credentials, headers, data);
+      return await this.request(method, route, credentials, headers, JSON.stringify(data));
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +28,7 @@ module.exports = class PuppetFactory {
 
   async execute(actions) {
     try {
-      return await Promise.all(actions.map(({ method, route, data }) => this.action(method, route, JSON.stringify(data))));
+      return await Promise.all(actions.map(({ method, route, data }) => this.action(method, route, data)));
     } catch (error) {
       console.log(error);
     }
