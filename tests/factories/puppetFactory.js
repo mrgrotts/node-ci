@@ -48,13 +48,16 @@ module.exports = class PuppetFactory {
     await this.page.waitFor('a[href="/auth/logout"]');
   }
 
-  async request(method, path, credentials, headers, body) {
+  request(method, path, credentials, headers, body) {
     try {
       if (body) {
         // some of our arguments get transformed here
         // console.log(method, path, credentials, headers, body);
-        return await this.page.evaluate(
-          (method, path, credentials, headers, body) => fetch(path, { method, credentials, headers, body }).then(res => res.json()),
+        return this.page.evaluate(
+          async (method, path, credentials, headers, body) => {
+            const response = await fetch(path, { method, credentials, headers, body });
+            return response.json();
+          },
           method,
           path,
           credentials,
@@ -64,8 +67,11 @@ module.exports = class PuppetFactory {
       } else {
         // some of our arguments get transformed here
         // console.log(method, path, credentials, headers, body);
-        return await this.page.evaluate(
-          (method, path, credentials, headers) => fetch(path, { method, credentials, headers }).then(res => res.json()),
+        return this.page.evaluate(
+          async (method, path, credentials, headers) => {
+            const response = await fetch(path, { method, credentials, headers });
+            return response.json();
+          },
           method,
           path,
           credentials,
